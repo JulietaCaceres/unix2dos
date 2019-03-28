@@ -6,24 +6,23 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include "options.h"
-
+#include "unix2dos.h"
 FILE * open_infile(const char * path) {
-	// fprintf(stderr, "Opening input file %s\n", path);
     return fopen(path, "rb");
 }
 
 FILE * open_outfile(const char * path) {
-	// fprintf(stderr, "Opening output file %s\n", path);
     return fopen(path, "wt");
 }
 
 int main (int argc, char ** argv) {
-    FILE * fin = NULL; 						// Default is stdin
-    FILE * fout = NULL; 					// Default is stdout
+
+    FILE * fin = NULL;   // Default is stdin
+    FILE * fout = NULL; // Default is stdout
+    int c;
     static struct option long_options[] = {
 		{"input", optional_argument, 0, 'i'},
 		{"output", optional_argument, 0, 'o'},
-		//{"action", optional_argument, 0, '-'},
 		{0, 0, 0, 0}
 	};
 
@@ -56,18 +55,32 @@ int main (int argc, char ** argv) {
 				return EXIT_FAILURE;
 		}
 	}
-	
-	
 
-    //Aca se llamaria a las funciones encargadas de modificar el archivo.
+	printf("tenemos los archivos");
+// Dejo comentado que haria si no usara los arhivos unix2dos
+//	int character;
+//	do {
+//		character = fgetc (fin);
+//		if(character == '\n') {
+//			printf("un barra n");
+//			fputc('\r', fout);
+//			fputc(character, fout);
+//		}else {
+//			printf("The integer is %c \n",(char)character);
+//			fputc(character, fout);
+//		}
+//	}while (character != EOF);
 
-		if (fin) {
-			fclose(fin);
-		}
-		
-		if (fout) {
-			fclose(fout);
-		}
+	Unix2dos_t unix2dos;
+	Unix2dos_create(&unix2dos, fin, fout);
+	Unix2dos_start(&unix2dos);
+
+	if (fin) {
+		fclose(fin);
+	}
+	if (fout) {
+		fclose(fout);
+	}
 
 	if (!fout) {
 		// Si la salida es estandar
