@@ -5,7 +5,6 @@
 #include <getopt.h>
 #include <stdbool.h>
 #include <unistd.h>
-#include "options.h"
 #include "unix2dos.h"
 FILE * open_infile(const char * path) {
     return fopen(path, "rb");
@@ -56,7 +55,7 @@ int main (int argc, char ** argv) {
 		}
 	}
 
-	printf("tenemos los archivos");
+	//printf("tenemos los archivos");
 // Dejo comentado que haria si no usara los arhivos unix2dos
 //	int character;
 //	do {
