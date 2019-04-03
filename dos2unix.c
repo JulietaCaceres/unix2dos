@@ -1,63 +1,60 @@
-#include <stdlib.h>
+#include <string.h>
+#include <arpa/inet.h>
+#include "dos2unix.h"
 #include <stdio.h>
 
 
+//Esta función inicializa el dos2unix, recibiendo  como parametros los files que serviran de input u output para el programa. De ser estos nulos, se usara el comportamiento por default que es utilizar la entrada y salida estandar.
+//
+int Dos2unix_create(Dos2unix_t * dos2unix, FILE * input, FILE * output) {
 
-int main(int argc, char *argv[]){	
-	FILE * fdr = NULL;
-	FILE * fdw = NULL;
-	if(argc == 1){//leer y escribir en stdio y out
-		fdr = stdin;
-		fdw = stdout;
-	}else if(argc == 3 ){
-		if(!strcmp(argv[1],"-i")){
-			fdr = fopen(argv[2],"r");
-			fdw = stdout;
-		}else if(!strcmp(argv[1],"-o")){			
-			fdw = fopen(argv[2],"w");
-			fdr = stdin;
-		}else{
-			printf("error en los parametros de entrada");
-			return 0;
-		}	
-	}else if(argc == 5 ){
-		if(!strcmp(argv[1],"-i") && !strcmp(argv[3],"-o")){
-			fdw = fopen(argv[4],"w");
-			fdr = fopen(argv[2],"r");
-		}else if(!strcmp(argv[3],"-i") && !strcmp(argv[1],"-o")){
-			fdw = fopen(argv[2],"w");
-			fdr = fopen(argv[4],"r");
-		}else{
-			printf("error en los parametros de entrada");
-			return 0;
-		}
-	}else{
-		printf("error en los parametros de entrada");
-		return 0;
+	if (input) {
+		dos2unix -> _fin = input;
+	} else {
+		dos2unix -> _fin =  stdin;
 	}
-	char c;
-	char flag = 0;//flag == 1 -> el c anteriro fue \r
-	c = fgetc(fdr);
-	while(!feof(fdr)){
-		if(flag){
-			if(c == '\r'){
-				flag == 1;
-			}else if(c == '\n'){
-				flag = 0;
-			}else{
-				fputc('\r',fdw);
-				flag = 0;	
-			}	
-			fputc(c,fdw);	
-		}else
-			if(c == '\r'){
-				flag = 1;			
-			}else				
-				fputc(c,fdw);	
 
-		c = fgetc(fdr);	
-	}		
-	fclose(fdw);
-	fclose(fdr);
+	if (output) {
+		dos2unix -> _fout = output;
+	} else {
+		dos2unix -> _fout =  stdout;
+	}
+	//printf("Se crep correctamente");
+	
 	return 0;
 }
+
+int Dos2unix_start(Dos2unix_t * dos2unix) {
+//printf("se metio");
+	int character;
+	int flag = 0;
+	character = fgetc (dos2unix -> _fin);
+	while (character != EOF){
+		if (flag == 1){	
+			if (character == '\r') {
+				flag = 1;
+			}else if(character == '\n') {
+				flag = 0;
+			}else{
+				fputc('\r',dos2unix->_fout);
+				flag = 0;
+			}
+            	fputc(character,dos2unix->_fout);
+		}else {
+			if (character == '\r') {
+				flag = 1;
+			}else{
+				fputc(character,dos2unix->_fout);
+			}
+                }
+		character = fgetc(dos2unix -> _fin);
+        }
+
+ 
+  	return 0;
+ }	
+
+
+
+
+
