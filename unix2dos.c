@@ -19,22 +19,18 @@ int Unix2dos_create(Unix2dos_t * unix2dos, FILE * input, FILE * output) {
 	} else {
 		unix2dos -> _fout =  stdout;
 	}
-	//printf("Se crep correctamente");
-	
+
 	return 0;
 }
 
 int Unix2dos_start(Unix2dos_t * unix2dos) {
-//printf("se metio");
 	int character;
 	character = fgetc (unix2dos -> _fin);
 	while (character != EOF){
                 if(character == '\n') {
-                        //printf("un barra n");
                         fputc('\r',unix2dos->_fout);
                         fputc(character,unix2dos->_fout);
                 }else {
-                        //printf("The integer is %c \n",(char)character);
                         fputc(character,unix2dos->_fout);
                 }
 		character = fgetc (unix2dos -> _fin);
