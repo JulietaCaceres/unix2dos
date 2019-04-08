@@ -1,19 +1,9 @@
 #!/bin/basht
 
-# Program names.
-UNIX2DOS='./unix2dos'
-DOS2UNIX='./dos2unix'
-
-# Test folder name.
-TEST_FOLDER='./fileTest'
-
-# Files names.
-FILES_NAME='test'
-
-# Counter of test
+# Test counter.
 COUNT_TEST=0;
 
-# Define color:
+# Definition of colors:
 RED="\e[31m";
 GREEN="\e[32m";
 MAGENTA="\e[35m"

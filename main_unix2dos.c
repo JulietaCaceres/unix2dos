@@ -72,11 +72,5 @@ int main (int argc, char ** argv) {
 		fclose(fout);
 	}
 
-	if (!fout) {
-		// Si la salida es estandar
-		// imprimimos un \n final
-		// puts("");
-	}
-
 	return EXIT_SUCCESS;
 }

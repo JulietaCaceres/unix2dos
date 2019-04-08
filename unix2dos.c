@@ -4,8 +4,9 @@
 #include <stdio.h>
 
 
-//Esta función inicializa el unix2dos, recibiendo  como parametros los files que serviran de input u output para el programa. De ser estos nulos, se usara el comportamiento por default que es utilizar la entrada y salida estandar.
-//
+//Esta función inicializa el unix2dos, recibiendo  como parametros los files que serviran de input u output para el programa.
+// De ser estos nulos, se usara el comportamiento por default que es utilizar la entrada y salida estandar.
+
 int Unix2dos_create(Unix2dos_t * unix2dos, FILE * input, FILE * output) {
 
 	if (input) {
@@ -23,6 +24,8 @@ int Unix2dos_create(Unix2dos_t * unix2dos, FILE * input, FILE * output) {
 	return 0;
 }
 
+// Método encargado de reemplazar \n por \r\n
+//
 int Unix2dos_start(Unix2dos_t * unix2dos) {
 	int character;
 	character = fgetc (unix2dos -> _fin);

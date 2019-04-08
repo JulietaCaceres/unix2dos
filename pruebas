@@ -8,8 +8,12 @@ gcc main_unix2dos.c unix2dos.o -o u22
 gcc testFiles/creadorDeTest.c -o testFiles/cdt
 ./testFiles/cdt
 
-echo  "Compilation complete."
+echo  "Complete Compilation."
+
+# Test counter
 CantPruebas=5
+
+# Definition of colors
 RED="\e[31m";
 GREEN="\e[32m";
 MAGENTA="\e[35m"
