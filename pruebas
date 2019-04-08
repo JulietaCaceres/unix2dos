@@ -8,10 +8,14 @@ gcc main_unix2dos.c unix2dos.o -o u22
 gcc testFiles/creadorDeTest.c -o testFiles/cdt
 ./testFiles/cdt
 
+echo  "Compilation complete."
 CantPruebas=5
+RED="\e[31m";
+GREEN="\e[32m";
+MAGENTA="\e[35m"
+DEFAULT="\e[97m";
 
-
-echo "==================== Unix2Dos ===================="
+echo -e "$MAGENTA\0==================== Unix2Dos ====================$DEFAULT\0"
 i=1
 while [ $i -le $CantPruebas ]
 do
@@ -19,18 +23,17 @@ do
 	DIFF=$(diff testFiles/testCaseSol$i  testFiles/testCaseRes$i) 
 	if [ "$DIFF" == "" ] 
 	then
-	    echo "Test $i Ok"
+	    echo -e "Test $i $GREEN\0Ok$DEFAULT"
 	fi
 
 	if [ "$DIFF" != "" ] 
 	then
-	    echo "Test $i Fallo"
+	    echo -e "Test $i $RED\0Fallo$DEFAULT"
 	fi
 	i=$(( $i + 1 ))
 done
 
-
-echo "==============Dos2Unix============="
+echo -e "$MAGENTA\0==============Dos2Unix=============$DEFAULT\0"
 i=1
 while [ $i -le $CantPruebas ]
 do
@@ -38,12 +41,12 @@ do
 	DIFF=$(diff testFiles/testCase$i  testFiles/testCaseRes2.$i) 
 	if [ "$DIFF" == "" ] 
 	then
-	    echo "Test $i Ok"
+	    echo -e "Test $i $GREEN\0OK$DEFAULT\0"
 	fi
 
 	if [ "$DIFF" != "" ] 
 	then
-	    echo "Test $i Fallo"
+	    echo -e "Test $i $RED\0Fallo$DEFAULT\0"
 	fi
 	i=$(( $i + 1 ))
 done
