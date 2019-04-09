@@ -37,8 +37,8 @@ bin:
 	gcc -Wall -o unix2dos main_unix2dos.c unix2dos.c
 	gcc -Wall -o dos2unix main_dos2unix.c dos2unix.c
 # Ejecuta los test.
-test:
+test: bin
 	chmod +x pruebas
 	./pruebas
-	sh exceptionTest.sh
+	sh testException.sh
 .PHONY: gxemul loopback
