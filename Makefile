@@ -45,5 +45,5 @@ bin:
 test: bin
 	chmod +x pruebas
 	./pruebas
-	sh testException.sh
+	sh exceptionTest.sh
 .PHONY: gxemul loopback
