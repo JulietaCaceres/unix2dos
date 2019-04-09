@@ -25,6 +25,11 @@ h2guest:
 # a guest en la carpeta /root/tp0	
 make2guest:
 	sudo scp -P2222 ./Makefile root@127.0.0.1:/root/tp0
+# Envia los archivos de prueba
+test2guest:
+	sudo scp -P2222 -r ./pruebas root@127.0.0.1:/root/tp0
+	sudo scp -P2222 -r ./exceptionTest.sh root@127.0.0.1:/root/tp0
+	sudo scp -P2222 -r ./testFiles root@127.0.0.1:/root/tp0
 
 # Se ejecuta del lado de guest
 # genera el archivo assembly
