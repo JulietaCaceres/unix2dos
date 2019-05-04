@@ -1,9 +1,5 @@
 #!/bin/bash
 echo "==================== Seteo ===================="
-gcc -c dos2unix.c
-gcc main_dos2unix.c dos2unix.o -o 22u
-gcc -c unix2dos.c
-gcc main_unix2dos.c unix2dos.o -o u22
 
 gcc testFiles/creadorDeTest.c -o testFiles/cdt
 ./testFiles/cdt
@@ -23,7 +19,7 @@ echo -e "$MAGENTA\0==================== Unix2Dos ====================$DEFAULT\0"
 i=1
 while [ $i -le $CantPruebas ]
 do
-	./u22 -i testFiles/testCase$i -o testFiles/testCaseRes$i
+	./unix2dos -i testFiles/testCase$i -o testFiles/testCaseRes$i
 	DIFF=$(diff testFiles/testCaseSol$i  testFiles/testCaseRes$i) 
 	if [ "$DIFF" == "" ] 
 	then
@@ -41,7 +37,7 @@ echo -e "$MAGENTA\0==============Dos2Unix=============$DEFAULT\0"
 i=1
 while [ $i -le $CantPruebas ]
 do
-	./22u -o testFiles/testCaseRes2.$i -i testFiles/testCaseSol$i
+	./dos2unix -o testFiles/testCaseRes2.$i -i testFiles/testCaseSol$i
 	DIFF=$(diff testFiles/testCase$i  testFiles/testCaseRes2.$i) 
 	if [ "$DIFF" == "" ] 
 	then
