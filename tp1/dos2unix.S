@@ -7,6 +7,7 @@
    wsalto: .asciiz "\r"
   end: .asciiz "Termina?\n"
   error_me: .asciiz "error?\n"
+
 .text
    .globl main
 main:
@@ -30,7 +31,7 @@ main:
 loop:
 
 	beq v0, 0, termina  #jump if EOF
-  bltz  v0, readerror #jump if erno 
+  bltz  v0, error #jump if erno 
 
 	beq s2,zero,flago   #jump if flag == 0
 	
@@ -44,6 +45,7 @@ loop:
   li  a2, 1
   li  v0, SYS_write   
   syscall   		      #fputc('\r');
+  bltz  v0, error #jump if erno 
 
 dodgePutR:
 	add s2,zero,zero		#flag = 0;
@@ -55,13 +57,15 @@ writeAndContinue:
   li  a2, 1
   li  v0, SYS_write   
   syscall   					#fputc();
-				
+  bltz  v0, error #jump if erno
+ 
   li  a0, 0
   la  a1, letra
   li  a2, 1
   li  v0, SYS_read
   syscall  					#getc()
-
+  bltz  v0, error #jump if erno
+ 
 	j loop
 
 flago:
@@ -74,12 +78,14 @@ flago:
   li  a2, 1
   li  v0, SYS_write   
   syscall   	            #fputc();
+  bltz  v0, error #jump if erno 
 
   li  a0, 0
   la  a1, letra
   li  a2, 1
   li  v0, SYS_read
   syscall 								#getc()
+  bltz  v0, error #jump if erno 
 
   j loop
 
@@ -91,28 +97,21 @@ setFlagAndContinue:
   li  a2, 1
   li  v0, SYS_read
   syscall 							#getc()
+  bltz  v0, error #jump if erno 
 
   j loop
 
 termina:
-  li  a0, 1
-  la  a1, end
-  li  a2, 9
-  li  v0, SYS_write    # print_str syscall
   lw  ra, 20(sp)
   lw  $fp, 16(sp)
   addiu  sp, sp, 32
   jr ra
 
 
-readerror:
-  li  a0, 1
-  la  a1, error_me
-  li  a2, 8
-  li  v0, SYS_write    # print_str syscall
+error:
   lw  ra, 20(sp)
   lw  $fp, 16(sp)
   addiu  sp, sp, 32
-  li v0, 10
-  syscall
+	addi v0,zero,-1
+  jr ra
 
