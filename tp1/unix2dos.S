@@ -9,10 +9,16 @@
 
 .text
      .align 2
-     .globl main
+     .global main
+     .ent main
 
 main:
+     .set noreorder
+     .cpload t9
+     .set reorder
+
      subu    sp,  sp,  32
+     .cprestore 12
      sw      ra,  20(sp)
      sw      $fp, 16(sp)
      addiu   $fp, sp,  28
@@ -61,10 +67,6 @@ agregar_r:
      jr ra
 
 termina:
-     li  a0, 0
-     la  a1, end
-     li  a2, 9
-     li  v0, SYS_write    # print_str syscall
      lw  ra, 20(sp)
      lw  $fp, 16(sp)
      addiu  sp, sp, 32
@@ -84,4 +86,3 @@ termina:
      addi v0,zero,-1
      li v0, SYS_exit
      syscall
-
