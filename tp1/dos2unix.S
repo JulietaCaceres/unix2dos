@@ -9,13 +9,28 @@
   error_me: .asciiz "error?\n"
 
 .text
-   .globl main
+		.ent main
+   	.globl main
 main:
-   subu   sp, sp, 32
 
-   sw     ra, 20(sp)
-   sw     $fp, 16(sp)
-   addiu  $fp, sp, 28
+
+
+	.frame	$fp,40,ra		# vars= 16, regs= 2/0, args= 0, extra= 8
+	.set	noreorder
+	.cpload	t9
+	.set	reorder
+
+	#Stack frame creation
+	subu	sp,sp,40
+
+	.cprestore  20 			# equivale a  sw gp,20(sp) 
+   	sw     ra, 28(sp)
+   	sw     $fp, 24(sp)   	
+		sw     s0, 32(sp)
+   	sw     s1, 36(sp)
+   	addiu  $fp, sp,0
+
+
 
 
 	lb s0,salto
@@ -102,16 +117,25 @@ setFlagAndContinue:
   j loop
 
 termina:
-  lw  ra, 20(sp)
-  lw  $fp, 16(sp)
-  addiu  sp, sp, 32
+
+  lw     ra, 28(sp)
+  lw     $fp, 24(sp)   	
+	lw     s0, 32(sp)
+  lw     s1, 36(sp)
+  addiu  $fp, sp,40
+
   jr ra
 
 
 error:
-  lw  ra, 20(sp)
-  lw  $fp, 16(sp)
-  addiu  sp, sp, 32
+
+  lw     ra, 28(sp)
+  lw     $fp, 24(sp)   	
+	lw     s0, 32(sp)
+  lw     s1, 36(sp)
+  addiu  $fp, sp,40
+
 	addi v0,zero,-1
   jr ra
+.end
 
