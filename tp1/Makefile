@@ -33,7 +33,6 @@ bin:
 	gcc -Wall -o dos2unix  dos2unix.S
 
 # Ejecuta los test.
-test: 
+test: bin
 	bash pruebas
-	sh exceptionTest.sh
 .PHONY: gxemul loopback
