@@ -66,7 +66,6 @@ putc:
      j loop
 
 termina:
-
      lw      ra,   24(sp)
      lw      $fp,  20(sp)
      lw      gp,   16(sp)
@@ -75,8 +74,8 @@ termina:
      li      v0,   SYS_exit
      syscall
      jr ra
- read_error:
 
+ read_error:
      li      a0,   0
      la      a1,   rderr
      li      a2,   8
