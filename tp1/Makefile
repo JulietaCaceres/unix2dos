@@ -29,8 +29,8 @@ test2guest:
 # Compila y genera un binario
 # desde el lado del guest
 bin:
-	gcc -Wall -g -o unix2dos  unix2dos.S
-	gcc -Wall -g -o dos2unix  dos2unix.S
+	gcc -Wall -o unix2dos  unix2dos.S
+	gcc -Wall -o dos2unix  dos2unix.S
 
 # Ejecuta los test.
 test: 

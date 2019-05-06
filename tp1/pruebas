@@ -15,7 +15,9 @@ GREEN="\e[32m";
 MAGENTA="\e[35m"
 DEFAULT="\e[97m";
 
-echo -e "$MAGENTA\0==================== Unix2Dos ====================$DEFAULT\0"
+echo -e "$MAGENTA"
+echo -e "==================== Unix2Dos ===================="
+echo -e "$DEFAULT"
 i=1
 while [ $i -le $CantPruebas ]
 do
@@ -23,16 +25,22 @@ do
         DIFF=$(diff testFiles/testCaseSol$i  testFiles/testCaseRes$i)
         if [ "$DIFF" == "" ]
         then
-            echo -e "Test $i $GREEN\0Ok$DEFAULT"
+            echo -e "Test $i $GREEN"
+	    echo -e "Ok"
+	    echo -e "$DEFAULT"
         fi
 
         if [ "$DIFF" != "" ]
         then
-            echo -e "Test $i $RED\0Fallo$DEFAULT"
+            echo -e "Test $i $RED"
+	    echo -e "Ok"
+	    echo -e "$DEFAULT"
         fi
         i=$(( $i + 1 ))
 done
-echo -e "$MAGENTA\0==============Dos2Unix=============$DEFAULT\0"
+echo -e "$MAGENTA"
+echo -e "==================== Dos2Unix ===================="
+echo -e "$DEFAULT"
 i=1
 while [ $i -le $CantPruebas ]
 do
@@ -40,12 +48,16 @@ do
         DIFF=$(diff testFiles/testCase$i  testFiles/testCaseRes2.$i)
         if [ "$DIFF" == "" ]
         then
-            echo -e "Test $i $GREEN\0OK$DEFAULT\0"
+            echo -e "Test $i $GREEN"
+	    echo -e "Ok"
+	    echo -e "$DEFAULT"
         fi
 
         if [ "$DIFF" != "" ]
         then
-            echo -e "Test $i $RED\0Fallo$DEFAULT\0"
+            echo -e "Test $i $RED"
+	    echo -e "Ok"
+	    echo -e "$DEFAULT"
         fi
         i=$(( $i + 1 ))
 done
