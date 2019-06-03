@@ -21,8 +21,11 @@ main:
      .cprestore 12
      sw      ra,  20(sp)
      sw      $fp, 16(sp)
-     addiu   $fp, sp,  28
-     la      t0,  salto_n
+     addiu   $fp, sp,  28	
+	sw	a0,32(sp)
+	sw	a1,36(sp) 
+	
+
 
 loop:
      
@@ -32,13 +35,13 @@ loop:
      li      v0,   SYS_read
      syscall
 
-     beq     v0 ,  zero, termina
-     bltz    v0,   read_error
+  bne  a3, zero,read_error #jump if erno 
+     beq     v0 ,  zero, termina  
 
      lb      t0,   letra
      lb      t1,   salto_n
      bne     t0,   t1,    putc
-     jal     agregar_r
+     b     agregar_r
 
 putc:
      li      a0,    1
@@ -86,3 +89,5 @@ termina:
      addi v0,zero,-1
      li v0, SYS_exit
      syscall
+
+.end
