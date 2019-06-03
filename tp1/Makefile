@@ -40,12 +40,11 @@ asm:
 # Compila y genera un binario
 # desde el lado del guest
 bin:	
-	gcc -o unix2dos unix2dos.S
+	gcc -w -o unix2dos unix2dos.S
 	gcc -w -o dos2unix dos2unix.S
 
 # Ejecuta los test.
 test: bin
-	chmod +x pruebas
-	./pruebas
-	sh exceptionTest.sh
+	bash pruebas
+
 .PHONY: gxemul loopback
