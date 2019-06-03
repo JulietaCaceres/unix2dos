@@ -1,0 +1,53 @@
+#!/bin/bash
+echo "==================== Seteo ===================="
+
+gcc testFiles/creadorDeTest.c -o testFiles/cdt
+./testFiles/cdt
+
+echo  "Complete Compilation."
+
+# Test counter
+CantPruebas=5
+
+# Definition of colors
+RED="\e[31m";
+GREEN="\e[32m";
+MAGENTA="\e[35m"
+DEFAULT="\e[97m";
+
+echo -e "$MAGENTA\0==================== Unix2Dos ====================$DEFAULT\0"
+i=1
+while [ $i -le $CantPruebas ]
+do
+	./unix2dos <testFiles/testCase$i > testFiles/testCaseRes$i
+	DIFF=$(diff testFiles/testCaseSol$i  testFiles/testCaseRes$i) 
+	if [ "$DIFF" == "" ] 
+	then
+	    echo -e "Test $i $GREEN\0Ok$DEFAULT"
+	fi
+
+	if [ "$DIFF" != "" ] 
+	then
+	    echo -e "Test $i $RED\0Fallo$DEFAULT"
+	fi
+	i=$(( $i + 1 ))
+done
+
+echo -e "$MAGENTA\0==============Dos2Unix=============$DEFAULT\0"
+i=1
+while [ $i -le $CantPruebas ]
+do
+
+	./dos2unix > testFiles/testCaseRes2.$i < testFiles/testCaseSol$i
+	DIFF=$(diff testFiles/testCase$i  testFiles/testCaseRes2.$i) 
+	if [ "$DIFF" == "" ] 
+	then
+	    echo -e "Test $i $GREEN\0OK$DEFAULT\0"
+	fi
+
+	if [ "$DIFF" != "" ] 
+	then
+	    echo -e "Test $i $RED\0Fallo$DEFAULT\0"
+	fi
+	i=$(( $i + 1 ))
+done
