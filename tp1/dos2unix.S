@@ -9,8 +9,9 @@
   error_me: .asciiz "error?\n"
 
 .text
-		.ent main
+	.align 2
    	.globl main
+		.ent main
 main:
 
 
@@ -24,12 +25,15 @@ main:
 	subu	sp,sp,40
 
 	.cprestore  20 			# equivale a  sw gp,20(sp) 
-   	sw     ra, 28(sp)
-   	sw     $fp, 24(sp)   	
-		sw     s0, 32(sp)
-   	sw     s1, 36(sp)
-   	addiu  $fp, sp,0
+ 	sw     ra, 28(sp)
+ 	sw     $fp, 24(sp)   	
+	sw     s0, 32(sp)
+ 	sw     s1, 36(sp)
+ 	addiu  $fp, sp,0
 
+	sw	a0,40(sp)
+	sw	a1,44(sp) 
+	sw	s2,16(sp)
 
 
 
@@ -46,7 +50,7 @@ main:
 loop:
 
 	beq v0, 0, termina  #jump if EOF
-  bltz  v0, error #jump if erno 
+  bne  a3, zero,error #jump if erno 
 
 	beq s2,zero,flago   #jump if flag == 0
 	
@@ -60,7 +64,7 @@ loop:
   li  a2, 1
   li  v0, SYS_write   
   syscall   		      #fputc('\r');
-  bltz  v0, error #jump if erno 
+  bne  a3, zero,error #jump if erno 
 
 dodgePutR:
 	add s2,zero,zero		#flag = 0;
@@ -72,14 +76,14 @@ writeAndContinue:
   li  a2, 1
   li  v0, SYS_write   
   syscall   					#fputc();
-  bltz  v0, error #jump if erno
+  bne  a3, zero,error #jump if erno 
  
   li  a0, 0
   la  a1, letra
   li  a2, 1
   li  v0, SYS_read
   syscall  					#getc()
-  bltz  v0, error #jump if erno
+  bne  a3, zero,error #jump if erno 
  
 	j loop
 
@@ -93,14 +97,14 @@ flago:
   li  a2, 1
   li  v0, SYS_write   
   syscall   	            #fputc();
-  bltz  v0, error #jump if erno 
+  bne  a3, zero,error #jump if erno 
 
   li  a0, 0
   la  a1, letra
   li  a2, 1
   li  v0, SYS_read
   syscall 								#getc()
-  bltz  v0, error #jump if erno 
+  bne  a3, zero,error #jump if erno 
 
   j loop
 
@@ -112,18 +116,27 @@ setFlagAndContinue:
   li  a2, 1
   li  v0, SYS_read
   syscall 							#getc()
-  bltz  v0, error #jump if erno 
+  bne  a3, zero,error #jump if erno 
 
   j loop
 
 termina:
+	beq s2,zero,cierra
 
+  li  a0, 1
+  la  a1, wsalto
+  li  a2, 1
+  li  v0, SYS_write   
+  syscall   		      #fputc('\r');
+  bne  a3, zero,error #jump if erno 
+
+cierra:
   lw     ra, 28(sp)
   lw     $fp, 24(sp)   	
 	lw     s0, 32(sp)
   lw     s1, 36(sp)
   addiu  $fp, sp,40
-
+	lw s2,16(sp)
   jr ra
 
 
@@ -134,8 +147,8 @@ error:
 	lw     s0, 32(sp)
   lw     s1, 36(sp)
   addiu  $fp, sp,40
+	lw s2,16(sp)
 
 	addi v0,zero,-1
   jr ra
 .end
-
