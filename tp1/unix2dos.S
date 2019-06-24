@@ -1,8 +1,26 @@
 #include <mips/regdef.h>
 #include <sys/syscall.h>
 
+//STACK FRAME
+//____________  32
+//|  padding  | 28
+//|-----------|
+//|    ra     | 24
+//|-----------|
+//|    fp     | 20
+//|-----------|
+//|    gp     | 16
+//|-----------|
+//|    a3     | 12
+//|-----------|
+//|    a2     |  8
+//|-----------|
+//|    a1     |  4
+//|-----------|
+//|    a0     |  0
+//|-----------|
 
-#define SIZE 28
+#define SIZE 32
 .data
      letra:    .space        1
      salto_n:  .asciiz       "\n"
@@ -38,9 +56,8 @@ loop:
      li      v0,   SYS_read
      syscall
 
-	beq v0, 0, termina  #jump if EOF
-
-  bne  a3, zero,read_error #jump if erno
+     bne  a3, zero,read_error #jump if erno
+     beq v0, 0, termina  #jump if EOF
 
      lb      t0,   letra
      lb      t1,   salto_n
@@ -53,6 +70,7 @@ putc:
      li      a2,    1
      li      v0,    SYS_write    # print_str syscall
      syscall
+     bne  a3, zero,read_error #jump if erno
 
      b  loop
 

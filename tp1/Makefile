@@ -46,8 +46,5 @@ bin:
 # Ejecuta los test.
 test: bin
 	bash pruebas
-<<<<<<< HEAD
-=======
 
->>>>>>> f07ace65c5e318df241175161fa70547b40fe56e
 .PHONY: gxemul loopback
