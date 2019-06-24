@@ -1,16 +1,6 @@
 #include <mips/regdef.h>
 #include <sys/syscall.h>
 
-#       SRA
-# 28    |_______PADDING________|
-# 24    |_________RA___________|
-# 20    |_________FP___________|
-# 16    |_________GP___________|
-#       Arguments for calle write y read
-# 12    |_______PADDING _______|
-# 8     |_________fd___________|
-# 4     |_________msg__________|
-# 0     |_________size_________|
 
 #define SIZE 28
 .data
@@ -37,8 +27,8 @@ main:
      sw      $fp, 20(sp)
      sw      gp,  16(sp)
      move $fp,sp
-
-     la      t0,  salto_n
+	sw	a0,32(sp)
+	sw	a1,36(sp) 
 
 loop:
 
@@ -48,13 +38,14 @@ loop:
      li      v0,   SYS_read
      syscall
 
-     beq     v0 ,  zero, termina
-     bltz    v0,   read_error
+	beq v0, 0, termina  #jump if EOF
+
+  bne  a3, zero,read_error #jump if erno
 
      lb      t0,   letra
      lb      t1,   salto_n
      bne     t0,   t1,    putc
-     jal     agregar_r
+     b     agregar_r
 
 putc:
      li      a0,    1
@@ -63,14 +54,15 @@ putc:
      li      v0,    SYS_write    # print_str syscall
      syscall
 
-     j loop
+     b  loop
 
 termina:
      lw      ra,   24(sp)
      lw      $fp,  20(sp)
      lw      gp,   16(sp)
      addu    sp,   sp,   SIZE
-
+	lw	a0,32(sp)
+	lw	a1,36(sp) 
      li      v0,   SYS_exit
      syscall
      jr ra
@@ -85,40 +77,28 @@ termina:
      lw      $fp,  20(sp)
      lw      gp,   15(sp)
      addiu   sp,   sp,   SIZE
-
+	lw	a0,32(sp)
+	lw	a1,36(sp) 
      addi    v0,   zero, -1
      li      v0,   SYS_exit
      syscall
 
-# Función calle.
-agregar_r:
+agregar_r:    
+  li  a0, 1
+  la  a1, salto_r
+  li  a2, 1
+  li  v0, SYS_write   
+  syscall 
 
-#       SRA
-# 28    |_______PADDING________|
-# 24    |_________RA___________|
-# 20    |_________FP___________|
-# 16    |_________GP___________|
-#       Arguments for callee write
-# 12    |_______PADDING _______|
-# 8     |_________fd___________|
-# 4     |_________msg__________|
-# 0     |_________size_________|
-
-     subu    sp,    sp,  SIZE
-     sw      ra,    24(sp)
-     sw      $fp,   20(sp)
-     sw      gp,    16(sp)
-     move $fp,sp
-
-     li      a0,    1
-     la      a1,    salto_r
+  bne  a3, zero,read_error #jump if erno
+	li      a0,    1
+     la      a1,    salto_n
      li      a2,    1
-     li      v0,    SYS_write
+     li      v0,    SYS_write    # print_str syscall
      syscall
 
-     lw      ra,    24(sp)
-     lw      $fp,   20(sp)
-     lw      gp,    16(sp)
-     addiu   sp,    sp,  SIZE
-     jr ra
+  bne  a3, zero,read_error #jump if erno
+	b loop
 
+
+.end main
